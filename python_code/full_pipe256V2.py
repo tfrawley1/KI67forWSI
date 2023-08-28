@@ -24,7 +24,7 @@ image_list = os.listdir(IHC_directory)
 #get model and make pytorch transform to normalize input
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 model = ConvNet256().to(device)
-FILE = "W:\\python\\class256_6.pth"
+FILE = "W:\\python\\class256.pth"
 model.load_state_dict(torch.load(FILE))
 model.eval()
 
