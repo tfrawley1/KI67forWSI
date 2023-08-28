@@ -9,7 +9,7 @@ This pipeline was used on images ranging from 5 to 15GB in the CZI format. When 
 The most up-to-date version of the pipeline is /python_code/fulpipeV2.py
 
 # AI tissue analysis
-![Screenshot](Ai_tissue_img.png)
+![Screenshot](AI_tissue_img.png)
 
 # Watershed Method
 ![Screenshot](watershed_example.png)
