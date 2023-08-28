@@ -1,3 +1,6 @@
+#File for training auto encoder
+#Not using in final pipeline
+
 import torch 
 import torch.nn as nn 
 import torch.optim as optim 
