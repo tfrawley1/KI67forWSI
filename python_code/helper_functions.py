@@ -1,3 +1,10 @@
+########################################################################################
+# Tim Frawley
+# July 2023
+# 
+# Functions used by Ki67 pipeline and other programs related to Ki67 index project
+########################################################################################
+
 import numpy as np
 import math
 from aicspylibczi import CziFile
@@ -15,8 +22,8 @@ import torch.nn.functional as F
 import pandas as pd
 
 
-##SOME NOTES##
 
+#function to generate PNG tiles of step_size from mosaic tile
 def make_jpg_tiles(m, tile_image, tile_directory_path, step_size = 256):
     if(os.path.exists(tile_directory_path) == False) :
         os.mkdir(tile_directory_path)
@@ -35,6 +42,7 @@ def make_jpg_tiles(m, tile_image, tile_directory_path, step_size = 256):
             tile_path = os.path.join(tile_directory_path, tile_name)
             cv2.imwrite(tile_path, image)
 
+#generate PNG tiels from CZI file
 def czi_to_tiles(czi_file, mouse_ID, parent_directory_path):
     tile_path = os.path.join(parent_directory_path,"Tiles",mouse_ID)
 
@@ -51,6 +59,9 @@ def czi_to_tiles(czi_file, mouse_ID, parent_directory_path):
             step_size = 256
         make_jpg_tiles(i, mosaic_image, tile_path, step_size)
 
+#detect positive and total cell counts from stained tissue image
+#input: image as np array with 3 color channels
+#output: list of positive and all cell locations in image
 def detect_cells(image):
     image_hed = rgb2hed(image.copy())
     mask_positive = np.zeros(image_hed[:,:,2].shape)
@@ -64,7 +75,9 @@ def detect_cells(image):
     all_cells_clean = clean_overlapping_cells(all_cells)
     return(positive_cells_clean, all_cells_clean)
 
-
+# watershed method
+# input: np array of BGR image
+# output: array of cell center locations and radius size
 def ws_cells(image):
     cells = []
     mask2 = np.int32(image)
@@ -88,6 +101,7 @@ def ws_cells(image):
             cells.append([x,y,r])
     return(np.array(cells))
 
+# function to remove detected cell locations that are too close as set by d_threshold
 def clean_overlapping_cells(cells, d_threshold = 25):
     num_cells = len(cells)
     overlaps = np.zeros(num_cells)
@@ -107,7 +121,7 @@ def clean_overlapping_cells(cells, d_threshold = 25):
     clean_cells = cells[overlaps==0]
     return(clean_cells)
 
-
+# function to generate image showing detected cell locations in image
 def make_wsImage(image, cells, clean_cells):
     temp = image.copy()
 
@@ -125,6 +139,7 @@ def make_wsImage(image, cells, clean_cells):
 
     return(temp)
 
+# function to genearte binary mask for detecting all cells
 def get_all_mask(ihc_hed):
     #Taken from Saloni
     null = np.zeros_like(ihc_hed[:, :, 0])
@@ -145,6 +160,9 @@ def get_all_mask(ihc_hed):
 
     return mask
 
+# function to use ndi label to count clusters of viable panels
+# clusters of less than 10 panels are removed and gaps < 6 are filled in
+# note: ndi.label takes parameter "structure" which determines if panels on diagonal should be counted
 def clean_map(boolean_map):
     markers,_ = ndimage.label(boolean_map, structure = np.ones((3,3)))
 
@@ -163,14 +181,14 @@ def clean_map(boolean_map):
     final_map = (markers_inverse == 0)
     return(final_map)
 
+#function to apply gauss filter to image
 def filter_image(image, blur_radius):
     im = Image.fromarray(np.uint8(image.copy()))
     im = im.filter(ImageFilter.GaussianBlur(radius = blur_radius))
     image_fil = np.array(im.getdata()).reshape(im.size[0], im.size[1], 3)
     return(np.uint8(image_fil))
 
-#Conv Net
-
+#Conv Net for 400px and 256px iamges
 class ConvNet400(nn.Module):
     def __init__(self):
         super(ConvNet400, self).__init__()
