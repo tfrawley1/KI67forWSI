@@ -6,7 +6,7 @@ The pipeline has two main sections, the first uses a convolutional net to classi
 
 This pipeline was used on images ranging from 5 to 15GB in the CZI format. When run on a CPU, the analysis took from 20 minutes up to 45 minutes for the largest images (manual analysis could take 6 to 10 hours for just marking all areas of viable tissue).
 
-The most up-to-date version of the pipeline is /python_code/fulpipeV2.py
+The most up-to-date version of the pipeline is /python_code/full_pipeV2.py
 
 # AI tissue analysis
 ![Screenshot](AI_tissue_img.png)
