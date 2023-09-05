@@ -9,14 +9,15 @@ This pipeline was used on images ranging from 5 to 15GB in the CZI format. When 
 The most up-to-date version of the pipeline is /python_code/full_pipeV2.py
 
 # AI tissue analysis
-![Screenshot](AI_tissue_img.png)
+![Screenshot](KI67forWSI/readme_images/ai_task_snapshot.png)
+![Screenshot](KI67forWSI/readme_images/AI_tissue_img.png)
 
 # Watershed Method
-![Screenshot](watershed_example.png)
+![Screenshot](KI67forWSI/readme_images/watershed_example.png)
 
 # Dense region detection
 The map on the right depicts viable tissue shown in blue and the dense areas within those regions shown in yellow. Discarded areas of the image are colored red.
-![Screenshot](cell_count_density_map.png)
+![Screenshot](KI67forWSI/readme_images/cell_count_density_map.png)
 
 # Example of Results
-![Screenshot](result_examples.png)
+![Screenshot](KI67forWSI/readme_images/result_examples.png)
